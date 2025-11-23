@@ -128,3 +128,11 @@ npm run lint
 
 - **Supabase:** Real-time database operations and authentication
 
+## 👨‍💻 About The Developer
+
+**Adebowale Samuel Lipede**  
+*Founder & Technical Architect*
+
+This platform was designed, architected, and developed as a solo technical founder to demonstrate exceptional promise in digital technology for the UK Global Talent Visa application. Every component—from the real-time dispatch system to the multi-role user interfaces—was built from the ground up to modernize roadside assistance in the UK market.
+
+📧 debolipede@artservicesltd.co.uk
