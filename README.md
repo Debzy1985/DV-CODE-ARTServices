@@ -43,23 +43,34 @@ ART Services Platform
 
 ## 🚀 Quick Start
 
+### Prerequisites
+- Node.js 18.0 or higher
+- npm or yarn package manager
+
+### Installation & Development
+
 ```bash
+# Clone the repository
+git clone https://github.com/Debzy1985/DV-CODE-ARTServices.git
+cd DV-CODE-ARTServices
 
 # Install dependencies
-
 npm install
 
-
-
-# Start development server
-
+# Start development server (with hot reload)
 npm run dev
 
-
-
 # Build for production
-
 npm run build
+
+# Build for development environment
+npm run build:dev
+
+# Preview production build locally
+npm run preview
+
+# Run ESLint for code quality
+npm run lint
 
 
 
