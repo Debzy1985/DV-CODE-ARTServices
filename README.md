@@ -4,8 +4,7 @@ A sophisticated, full-stack digital platform transforming the UK's £2.2 billion
 
 ## 🎯 Live Demos
 
-* **Customer Prototype:** [Deploypad Link](https://preview-4xzn47q2--towing-mobile-request.deploypad.app/)
-* **UX Prototype:** [Readymag Link](https://readdy.link/preview/99eea991-f4f7-4ae8-8166-8c55944b92ff/3560436)
+* **Customer Prototype:** (https://readdy.link/preview/99eea991-f4f7-4ae8-8166-8c55944b92ff/4907391)
 
 ## 🛠 Technology Stack
 
