@@ -4,7 +4,7 @@ A sophisticated, full-stack digital platform transforming the UK's £2.2 billion
 
 ## 🎯 Live Demos
 
-* **Customer Prototype:** (https://readdy.link/preview/99eea991-f4f7-4ae8-8166-8c55944b92ff/4907391)
+* **Customer Prototype:** (https://artservicesltd.co.uk/)
 
 ## 🛠 Technology Stack
 
@@ -26,15 +26,15 @@ A sophisticated, full-stack digital platform transforming the UK's £2.2 billion
 
 ART Services Platform
 
-├── Customer App (React/TypeScript)
+ Customer App (React/TypeScript)
 
-├── Driver Portal (React/TypeScript)
+ Driver Portal (React/TypeScript)
 
-├── Admin Dashboard (React/TypeScript)
+Admin Dashboard (React/TypeScript)
 
-├── API Server (Node.js/Supabase)
+API Server (Node.js/Supabase)
 
-└── Real-time Database (PostgreSQL)
+Real-time Database (PostgreSQL)
 
 
 
