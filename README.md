@@ -1,4 +1,8 @@
 # ART Services Platform - Multi-Sided Roadside Assistance
+**This repository is submitted as part of my Global Talent Visa (Exceptional Promise) application for endorsement by Tech Nation UK.**
+**Purpose:** To demonstrate technical innovation and entrepreneurial execution in the UK's Digital Technology sector.
+**Focus:** The core, scalable architecture of the ART Services platform—a solution built specifically for the UK's roadside assistance and EV recovery market.
+**Note:** The live production system includes further business logic and client-facing refinements. This repo represents the foundation, open-sourced codebase and key technical innovations.
 
 A sophisticated, full-stack digital platform transforming the UK's £1.8 billion roadside assistance market. Built with modern web technologies to deliver seamless service experiences for customers, drivers, and administrators.
 
