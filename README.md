@@ -1,6 +1,6 @@
 # ART Services Platform - Multi-Sided Roadside Assistance
 
-A sophisticated, full-stack digital platform transforming the UK's £2.2 billion roadside assistance market. Built with modern web technologies to deliver seamless service experiences for customers, drivers, and administrators.
+A sophisticated, full-stack digital platform transforming the UK's £1.8 billion roadside assistance market. Built with modern web technologies to deliver seamless service experiences for customers, drivers, and administrators.
 
 ## 🎯 Live Demos
 
