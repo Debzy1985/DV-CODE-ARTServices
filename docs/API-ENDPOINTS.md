@@ -10,7 +10,7 @@ All endpoints (except auth) require a JWT token in the header:
 
 ## Core Endpoints
 
-###  Authentication
+### 🔐 Authentication
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `POST` | `/auth/login` | Authenticate user/operator |
@@ -18,7 +18,7 @@ All endpoints (except auth) require a JWT token in the header:
 | `POST` | `/auth/register/operator` | Register new operator |
 | `POST` | `/auth/refresh` | Refresh access token |
 
-###  Service Requests (Core Workflow)
+### 📍 Service Requests (Core Workflow)
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `POST` | `/requests` | Create a new breakdown request |
@@ -27,14 +27,14 @@ All endpoints (except auth) require a JWT token in the header:
 | `PUT` | `/requests/{id}/status` | Update request status (e.g., `en_route`) |
 | `POST` | `/requests/{id}/location` | Update live GPS coordinates |
 
-###  Operator Management
+### 👷 Operator Management
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `GET` | `/operators/available` | List available operators near location |
 | `POST` | `/operators/{id}/availability` | Update operator availability status |
 | `GET` | `/operators/{id}/jobs` | Get operator's job history |
 
-###  Payments (Stripe Integration)
+### 💳 Payments (Stripe Integration)
 | Method | Endpoint | Description |
 |--------|----------|-------------|
 | `POST` | `/payments/intent` | Create a Stripe PaymentIntent |
@@ -55,3 +55,11 @@ const socket = io('wss://ws.artservices.co.uk', {
   auth: { token: userToken },
   query: { userType: 'customer' }
 });
+
+Rate Limiting & API Status
+
+    Rate Limit: 100 requests/minute per API key
+
+    Status Page: https://status.artservices.co.uk
+
+    Full API Documentation: Available at /docs endpoint (OpenAPI 3.0)
