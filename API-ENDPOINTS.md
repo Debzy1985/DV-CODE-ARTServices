@@ -1,104 +1,65 @@
-# ART Services - Database Schema (PostgreSQL)
+# ART Services - API Endpoints Specification
 
-## Overview
-This document outlines the core database schema powering the ART Services platform, hosted on Supabase (PostgreSQL). The design emphasizes data integrity, real-time capabilities, and scalability for the UK market.
+## Base URL
+`https://api.artservices.co.uk/v1` (Production)
+`https://api.staging.artservices.co.uk/v1` (Staging)
 
-## Core Tables
+## Authentication
+All endpoints (except auth) require a JWT token in the header:
+`Authorization: Bearer <your_jwt_token>`
 
-### `users` - Central User Management
-```sql
-CREATE TABLE users (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  email VARCHAR(255) UNIQUE NOT NULL,
-  password_hash VARCHAR(255) NOT NULL,
-  full_name VARCHAR(255) NOT NULL,
-  phone_number VARCHAR(50) NOT NULL,
-  user_role VARCHAR(20) NOT NULL 
-    CHECK (user_role IN ('customer', 'operator', 'admin')),
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW(),
-  is_active BOOLEAN DEFAULT TRUE
-);
+## Core Endpoints
 
-service_requests - Breakdown Request Lifecycle
-sql
+### 🔐 Authentication
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/auth/login` | Authenticate user/operator |
+| `POST` | `/auth/register` | Register new customer |
+| `POST` | `/auth/register/operator` | Register new operator |
+| `POST` | `/auth/refresh` | Refresh access token |
 
-CREATE TABLE service_requests (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  customer_id UUID REFERENCES users(id) NOT NULL,
-  assigned_operator_id UUID REFERENCES users(id),
-  vehicle_type VARCHAR(50) NOT NULL,
-  issue_description TEXT NOT NULL,
-  latitude DECIMAL(10, 8) NOT NULL,
-  longitude DECIMAL(11, 8) NOT NULL,
-  formatted_address TEXT NOT NULL,
-  
-  status VARCHAR(30) NOT NULL DEFAULT 'pending'
-    CHECK (status IN ('pending', 'assigned', 'en_route', 'on_site', 'completed', 'cancelled')),
-  
-  price_estimate DECIMAL(10, 2),
-  final_price DECIMAL(10, 2),
-  stripe_payment_id VARCHAR(255),
-  
-  created_at TIMESTAMPTZ DEFAULT NOW(),
-  updated_at TIMESTAMPTZ DEFAULT NOW()
-);
+### 📍 Service Requests (Core Workflow)
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/requests` | Create a new breakdown request |
+| `GET` | `/requests/{id}` | Get details of a specific request |
+| `GET` | `/requests/user/current` | Get current user's active requests |
+| `PUT` | `/requests/{id}/status` | Update request status (e.g., `en_route`) |
+| `POST` | `/requests/{id}/location` | Update live GPS coordinates |
 
-operator_profiles - Operator-Specific Data
-sql
+### 👷 Operator Management
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/operators/available` | List available operators near location |
+| `POST` | `/operators/{id}/availability` | Update operator availability status |
+| `GET` | `/operators/{id}/jobs` | Get operator's job history |
 
-CREATE TABLE operator_profiles (
-  user_id UUID PRIMARY KEY REFERENCES users(id),
-  company_name VARCHAR(255),
-  vehicle_registration VARCHAR(50),
-  service_radius_km INTEGER DEFAULT 50,
-  is_available BOOLEAN DEFAULT FALSE,
-  current_latitude DECIMAL(10, 8),
-  current_longitude DECIMAL(11, 8),
-  ev_certification BOOLEAN DEFAULT FALSE,
-  average_rating DECIMAL(3, 2)
-);
+### 💳 Payments (Stripe Integration)
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `POST` | `/payments/intent` | Create a Stripe PaymentIntent |
+| `POST` | `/payments/confirm/{intentId}` | Confirm a completed payment |
 
-location_updates - Real-time GPS Tracking
-sql
+## Real-time WebSocket Events
+**Connection Endpoint:** `wss://ws.artservices.co.uk`
 
-CREATE TABLE location_updates (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  request_id UUID REFERENCES service_requests(id) NOT NULL,
-  source VARCHAR(20) CHECK (source IN ('operator', 'customer')),
-  latitude DECIMAL(10, 8) NOT NULL,
-  longitude DECIMAL(11, 8) NOT NULL,
-  accuracy INTEGER,
-  recorded_at TIMESTAMPTZ DEFAULT NOW()
-);
+**Key Events:**
+- `request:created` → Sent to available operators in the area
+- `request:assigned` → Sent to customer with operator details
+- `location:updated` → Live GPS updates between customer and operator
+- `eta:updated` → Updated Estimated Time of Arrival
 
-Key Database Features
+**Example Client-Side Connection:**
+```javascript
+const socket = io('wss://ws.artservices.co.uk', {
+  auth: { token: userToken },
+  query: { userType: 'customer' }
+});
 
-    Row-Level Security (RLS): Implemented via Supabase for granular data access.
+Rate Limiting & API Status
 
-    Real-time Subscriptions: Using Supabase's real-time capabilities for live tracking.
+    Rate Limit: 100 requests/minute per API key
 
-    Geospatial Queries: Optimized for location-based operator matching.
+    Status Page: https://status.artservices.co.uk
 
-    Audit Triggers: Automatic updated_at timestamping on all tables.
-
-Indexes for Performance
-sql
-
-CREATE INDEX idx_service_requests_status ON service_requests(status);
-CREATE INDEX idx_service_requests_location ON service_requests USING GIST(ll_to_earth(latitude, longitude));
-CREATE INDEX idx_operator_availability ON operator_profiles(is_available, ev_certification);
-CREATE INDEX idx_location_updates_request ON location_updates(request_id, recorded_at DESC);
-
-Data Relationships
-text
-
-users
-├─── service_requests (as customer)
-├─── service_requests (as assigned_operator)
-└─── operator_profiles (if user_role = 'operator')
-     |
-service_requests
-└─── location_updates (multiple updates per request)
-
-This schema supports the platform's core functionality while allowing for future scaling and feature additions.
+    Full API Documentation: Available at /docs endpoint (OpenAPI 3.0)
